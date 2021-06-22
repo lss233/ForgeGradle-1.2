@@ -2,6 +2,7 @@ package net.minecraftforge.gradle.common;
 
 import com.google.common.base.Joiner;
 import com.google.common.io.ByteStreams;
+import com.lss233.forge.gradle.ReposExtension;
 import groovy.lang.Closure;
 import net.minecraftforge.gradle.StringUtils;
 import net.minecraftforge.gradle.json.version.OS;
@@ -30,11 +31,12 @@ public class Constants {
     public static final OS OPERATING_SYSTEM = OS.CURRENT;
     public static final SystemArch SYSTEM_ARCH = getArch();
     public static final String HASH_FUNC = "MD5";
-    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11";
+    public static final String USER_AGENT = "Mozilla/5.0 ForgeGradle/1.2-1.0.6-lss233-rev (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11";
 
     // extension nam
     public static final String EXT_NAME_MC = "minecraft";
     public static final String EXT_NAME_JENKINS = "jenkins";
+    private static ReposExtension reposExtension;
 
     @SuppressWarnings("serial")
     public static final Closure<Boolean> CALL_FALSE = new Closure<Boolean>(null) {
@@ -44,14 +46,16 @@ public class Constants {
     };
 
     // urls
-    public static final String MC_JSON_URL = "https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VERSION}/{MC_VERSION}.json";
-    public static final String MC_JAR_URL = "https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VERSION}/{MC_VERSION}.jar";
-    public static final String MC_SERVER_URL = "https://s3.amazonaws.com/Minecraft.Download/versions/{MC_VERSION}/minecraft_server.{MC_VERSION}.jar";
-    public static final String MCP_URL = "https://anatawa12.github.io/ForgeGradle-resources/fernflower-fix-FG1.2.zip";
-    public static final String ASSETS_URL = "https://resources.download.minecraft.net";
-    public static final String LIBRARY_URL = "https://libraries.minecraft.net/";
-    public static final String FORGE_MAVEN = "https://maven.minecraftforge.net";
+    /*
+    public static final String MC_JSON_URL = "http://s3.amazonaws.com/Minecraft.Download/versions/{MC_VERSION}/{MC_VERSION}.json";
+    public static final String MC_JAR_URL = "http://s3.amazonaws.com/Minecraft.Download/versions/{MC_VERSION}/{MC_VERSION}.jar";
+    public static final String MC_SERVER_URL = "http://s3.amazonaws.com/Minecraft.Download/versions/{MC_VERSION}/minecraft_server.{MC_VERSION}.jar";
+    public static final String ASSETS_URL = "http://resources.download.minecraft.net";
     public static final String ASSETS_INDEX_URL = "https://s3.amazonaws.com/Minecraft.Download/indexes/{ASSET_INDEX}.json";
+     */
+    public static final String MCP_URL = "https://lss233.littleservice.cn/repositories/forgedev/fernflower-fix-1.0.zip";
+    public static final String FORGE_MAVEN = "https://lss233.littleservice.cn/repositories/forgedev";
+    public static final String LIBRARY_URL = "https://lss233.littleservice.cn/repositories/libraries.minecraft.net/";
 
     // MCP things
     public static final String CONFIG_MCP_DATA = "mcpSnapshotDataConfig";
@@ -243,5 +247,14 @@ public class Constants {
             throw new RuntimeException("Resource " + resource + " not found");
 
         return url;
+    }
+    public static ReposExtension getReposExtension(Project project) {
+        if(reposExtension == null) {
+            reposExtension = ReposExtension.getInstance(project);
+        }
+        return reposExtension;
+    }
+    public static ReposExtension getReposExtension() {
+        return reposExtension;
     }
 }

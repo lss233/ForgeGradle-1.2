@@ -6,9 +6,9 @@ plugins {
     signing
 }
 
-group = "com.anatawa12.forge"
+group = "com.lss233.forge"
 
-version = property("version")!!
+version = property("version")!! .toString() +  "-lss233-rev"
 
 base {
     archivesBaseName = "ForgeGradle"
@@ -20,20 +20,18 @@ java {
 
 repositories {
     mavenLocal()
-    maven("https://maven.minecraftforge.net") {
-        name = "forge"
+    maven( "https://maven.aliyun.com/repository/public") {
+        name = "aliyun-mirror"
+    }
+    maven("https://lss233.littleservice.cn/repositories/minecraft") {
+        name = "minecraft"
     }
     maven("https://repo.eclipse.org/content/groups/eclipse/") {
         // because Srg2Source needs an eclipse dependency.
         name = "eclipse"
     }
-    maven("https://oss.sonatype.org/content/repositories/snapshots/") {
-        // because SpecialSource doesnt have a full release
-        name = "sonatype"
-    }
-    mavenCentral()
-    maven("https://libraries.minecraft.net/") {
-        name = "mojang"
+    maven( "https://maven.aliyun.com/repository/gradle-plugin") {
+        name = "gradle-plugin"
     }
 }
 
@@ -133,17 +131,17 @@ publishing {
             pom {
                 name.set(project.base.archivesBaseName)
                 description.set("Gradle plugin for Forge")
-                url.set("https://github.com/anatawa12/ForgeGradle-1.2")
+                url.set("https://github.com/lss233/ForgeGradle-1.2")
 
                 scm {
-                    url.set("https://github.com/anatawa12/ForgeGradle-1.2")
-                    connection.set("scm:git:git://github.com/anatawa12/ForgeGradle-1.2.git")
-                    developerConnection.set("scm:git:git@github.com:anatawa12/ForgeGradle-1.2.git")
+                    url.set("https://github.com/lss233/ForgeGradle-1.2")
+                    connection.set("scm:git:git://github.com/lss233/ForgeGradle-1.2.git")
+                    developerConnection.set("scm:git:git@github.com:lss233/ForgeGradle-1.2.git")
                 }
 
                 issueManagement {
                     system.set("github")
-                    url.set("https://github.com/anatawa12/ForgeGradle-1.2/issues")
+                    url.set("https://github.com/lss233/ForgeGradle-1.2/issues")
                 }
 
                 licenses {
@@ -172,27 +170,12 @@ publishing {
                         name.set("anatawa12")
                         roles.set(setOf("developer"))
                     }
+                    developer {
+                        id.set("Lss233")
+                        name.set("Lss233")
+                        roles.set(setOf("developer"))
+                    }
                 }
-            }
-        }
-    }
-    repositories {
-        maven {
-            // change URLs to point to your repos, e.g. http://my.org/repo
-            val releasesRepoUrl = "$buildDir/repos/releases"
-            val snapshotsRepoUrl = "$buildDir/repos/snapshots"
-            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
-        }
-
-        maven {
-            name = "mavenCentral"
-            url = if (version.toString().endsWith("SNAPSHOT"))
-                uri("https://oss.sonatype.org/content/repositories/snapshots")
-            else uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-
-            credentials {
-                username = project.findProperty("com.anatawa12.sonatype.username")?.toString() ?: ""
-                password = project.findProperty("com.anatawa12.sonatype.passeord")?.toString() ?: ""
             }
         }
     }

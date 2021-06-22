@@ -10,6 +10,7 @@ import com.google.common.io.Files;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.lss233.forge.gradle.ReposExtension;
 import groovy.lang.Closure;
 import net.minecraftforge.gradle.FileLogListenner;
 import net.minecraftforge.gradle.GradleConfigurationException;
@@ -74,6 +75,8 @@ public abstract class BasePlugin<K extends BaseExtension> implements Plugin<Proj
                 }
             }
         }
+
+        Constants.getReposExtension(arg);
 
         // logging
         {
@@ -192,13 +195,14 @@ public abstract class BasePlugin<K extends BaseExtension> implements Plugin<Proj
         Logger logger = this.project.getLogger();
         logger.lifecycle("#################################################");
         logger.lifecycle("         ForgeGradle {}        ", this.getVersionString());
-        logger.lifecycle("   https://github.com/anatawa12/ForgeGradle-1.2  ");
+        logger.lifecycle("   https://github.com/lss233/ForgeGradle-1.2  ");
         logger.lifecycle("#################################################");
         logger.lifecycle("               Powered by MCP {}               ", this.delayedString("{MCP_VERSION}"));
         //noinspection HttpUrlsUsage
         logger.lifecycle("             http://modcoderpack.com             ");
         logger.lifecycle("         by: Searge, ProfMobius, Fesh0r,         ");
         logger.lifecycle("         R4wk, ZeuX, IngisKahn, bspkrs           ");
+        logger.lifecycle("         Lss233 Reversions for 1.7.10           ");
         logger.lifecycle("#################################################");
         if (!hasMavenCentralBeforeJCenterInBuildScriptRepositories()) {
             logger.lifecycle("");
@@ -276,13 +280,13 @@ public abstract class BasePlugin<K extends BaseExtension> implements Plugin<Proj
         task = makeTask("downloadClient", DownloadTask.class);
         {
             task.setOutput(delayedFile(Constants.JAR_CLIENT_FRESH));
-            task.setUrl(delayedString(Constants.MC_JAR_URL));
+            task.setUrl(delayedString(Constants.getReposExtension().getMcJarUrl()));
         }
 
         task = makeTask("downloadServer", DownloadTask.class);
         {
             task.setOutput(delayedFile(Constants.JAR_SERVER_FRESH));
-            task.setUrl(delayedString(Constants.MC_SERVER_URL));
+            task.setUrl(delayedString(Constants.getReposExtension().getMcServerUrl()));
         }
 
         ObtainFernFlowerTask mcpTask = makeTask("downloadMcpTools", ObtainFernFlowerTask.class);
@@ -293,7 +297,7 @@ public abstract class BasePlugin<K extends BaseExtension> implements Plugin<Proj
 
         EtagDownloadTask etagDlTask = makeTask("getAssetsIndex", EtagDownloadTask.class);
         {
-            etagDlTask.setUrl(delayedString(Constants.ASSETS_INDEX_URL));
+            etagDlTask.setUrl(delayedString(Constants.getReposExtension().getAssetsIndexUrl()));
             etagDlTask.setFile(delayedFile(Constants.ASSETS + "/indexes/{ASSET_INDEX}.json"));
             etagDlTask.setDieWithError(false);
 
@@ -318,7 +322,7 @@ public abstract class BasePlugin<K extends BaseExtension> implements Plugin<Proj
 
         etagDlTask = makeTask("getVersionJson", EtagDownloadTask.class);
         {
-            etagDlTask.setUrl(delayedString(Constants.MC_JSON_URL));
+            etagDlTask.setUrl(delayedString(Constants.getReposExtension().getMcJsonUrl()));
             etagDlTask.setFile(delayedFile(Constants.VERSION_JSON));
             etagDlTask.setDieWithError(false);
             etagDlTask.doLast(new Closure<Boolean>(project) // normalizes to linux endings
